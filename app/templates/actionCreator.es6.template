@@ -1,4 +1,7 @@
 import { ActionTypes } from '../constants/<%= containerName %>Constants.es6';
+<% if(hasAsync) { -%>
+import axios from 'axios';
+<% } -%>
 
 <% if(actions.length > 0) { -%>
 <% for(var i = 0, z = actions.length; i < z; i++) { -%>

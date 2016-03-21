@@ -1,0 +1,63 @@
+import <%= containerName %>, { mapStateToProps, mapDispatchToProps } from '../<%= containerName %>.jsx';
+import * as <%= containerName %>ActionCreators from '../../../actions/<%= containerName %>ActionCreators.es6';
+
+describe('<%= containerName %> container', () => {
+
+    let sandbox;
+
+    before(() => {
+        sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    it('should be connected to redux', () => {
+        expect(ProductDetails.WrappedComponent).to.be.ok;
+    });
+
+    context('#mapStateToProps', () => {
+
+        it('should return the proper state for <%= containerName %>', () => {
+            const mockOriginalState = {
+                FakeData: {},
+                <%= containerName %>: {}
+            };
+            const mockReturnedState = {
+                <%= containerName %>: {}
+            };
+            expect(mapStateToProps(mockOriginalState)).to.deep.equal(mockReturnedState);
+        });
+
+    });
+
+    context('#mapDispatchToProps', () => {
+        let mappedDispatch, dispatchStub;
+
+        before(() => {
+            dispatchStub = sandbox.stub();
+            mappedDispatch = mapDispatchToProps(dispatchStub);
+        });
+
+        context('`handle[YourActionName]`', () => {
+            it('should have an action `handle[YourActionName]`', () => {
+                expect(mappedDispatch.actions.handle[YourActionName]).to.be.a.function;
+            });
+
+            it('should call its respective action creator', () => {
+                sandbox.stub(<%= containerName %>ActionCreators, '[yourActionName]');
+                const data = { somekey: 'some val' };
+                mapDispatchToProps(dispatchStub).actions.handle[YourActionName](
+                    // replace with params expected by function
+                );
+                expect(<%= containerName %>ActionCreators.[yourActionName]).to.have.been.calledOnce;
+                expect(<%= containerName %>ActionCreators.[yourActionName]).to.have.been.calledWithExactly(
+                    // replace with params expected by function
+                );
+            });
+        });
+
+    });
+
+});

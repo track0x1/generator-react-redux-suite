@@ -139,7 +139,7 @@ module.exports = yeoman.generators.Base.extend({
             if (this.toConsole) {
                 console.log('\n\n/****** ACTION CREATOR ******/');
                 var file = nodefs.readFileSync(this.templatePath('actionCreator.es6.template'));
-                console.log(ejs.render(file.toString(), { containerName: this.containerName, actions: this.actions }));
+                console.log(ejs.render(file.toString(), { containerName: this.containerName, actions: this.actions, hasAsync: this.hasAsync }));
                 console.log('\n/****** ACTION CREATOR SPEC ******/');
                 file = nodefs.readFileSync(this.templatePath('actionCreatorSpec.es6.template'));
                 console.log(ejs.render(file.toString(), { containerName: this.containerName, actions: this.actions, hasAsync: this.hasAsync }));
@@ -147,7 +147,7 @@ module.exports = yeoman.generators.Base.extend({
                 this.fs.copyTpl(
                     this.templatePath('actionCreator.es6.template'),
                     this.destinationPath(this.path + 'actions/' + this.containerName + 'ActionCreators.es6'),
-                    { containerName: this.containerName, actions: this.actions }
+                    { containerName: this.containerName, actions: this.actions, hasAsync: this.hasAsync }
                 );
                 this.fs.copyTpl(
                     this.templatePath('actionCreatorSpec.es6.template'),
@@ -177,11 +177,20 @@ module.exports = yeoman.generators.Base.extend({
                     console.log('\n\n/****** CONTAINER COMPONENT ******/');
                     var file = nodefs.readFileSync(this.templatePath('containerComponent.jsx.template'));
                     console.log(ejs.render(file.toString(), { containerName: this.containerName, actions: this.actions }));
+                    console.log('\n/****** CONTAINER COMPONENT SPEC ******/');
+                    file = nodefs.readFileSync(this.templatePath('containerComponentSpec.jsx.template'));
+                    console.log(ejs.render(file.toString(), { containerName: this.containerName, actions: this.actions, hasAsync: this.hasAsync }));
                 } else {
                     this.fs.copyTpl(
                         this.templatePath('containerComponent.jsx.template'),
                         this.destinationPath(this.path + 'containers/' + this.containerName + '/' +
                         this.containerName + '.jsx'),
+                        { containerName: this.containerName, actions: this.actions }
+                    );
+                    this.fs.copyTpl(
+                        this.templatePath('containerComponentSpec.jsx.template'),
+                        this.destinationPath(this.path + 'containers/' + this.containerName + '/__tests__/' +
+                        this.containerName + 'Spec.jsx'),
                         { containerName: this.containerName, actions: this.actions }
                     );
                 }
