@@ -1,0 +1,61 @@
+import { ActionTypes } from '../../constants/<%= containerName %>Constants.es6';
+import * as Actions from '../<%= containerName %>ActionCreators.es6';
+<% if(hasAsync) { -%>
+import axios from 'axios';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+<% } -%>
+
+describe('<%= containerName %> action creators', () => {
+<% if(hasAsync) { -%>
+    let sandbox, mockStore;
+
+    before(() => {
+        mockStore = configureStore([thunk]);
+        sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+<% } -%>
+
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+<% if(actions[i].isAsync) { -%>
+    it('should dispatch actions correctly when <%= actions[i].actionName %> is fulfilled', (done) => {
+        const response = { response: 'sample data' };
+        const action = Actions.<%- actions[i].actionFunc -%>({ <%- actions[i].actionParams -%> });
+        const store = mockStore({}, [
+            { type: ActionTypes.REQUEST_<%= actions[i].actionName %>},
+            { type: ActionTypes.RECEIVE_<%- actions[i].actionName -%>, data: response},
+        ], done);
+
+        sandbox.stub(axios, 'post').returns(Promise.resolve(response));
+        store.dispatch(action);
+    });
+
+    it('should dispatch actions correctly when <%= actions[i].actionName %> is rejected', (done) => {
+        const response = { error: 'sample data' };
+        const action = Actions.<%- actions[i].actionFunc -%>({ <%- actions[i].actionParams -%> });
+        const store = mockStore({}, [
+            { type: ActionTypes.REQUEST_<%- actions[i].actionName -%>},
+            { type: ActionTypes.FAILURE_<%- actions[i].actionName -%>, error: response },
+        ], done);
+
+        sandbox.stub(axios, 'post').returns(Promise.reject(response));
+        store.dispatch(action);
+    });
+
+<% } else { -%>
+    it('should create an action `<%= actions[i].actionName %>`', () => {
+<% if (actions[i].actionParams === '') { -%>
+        const expectedAction = { type: ActionTypes.<%- actions[i].actionName -%> };
+<% } else { -%>
+        const expectedAction = { <%- actions[i].actionParams -%>, type: ActionTypes.<%- actions[i].actionName -%> };
+<% } -%>
+        expect(Actions.<%- actions[i].actionFunc -%>(<%- actions[i].actionParams -%>)).to.deep.equal(expectedAction);
+    });
+
+<% } -%>
+<% } -%>
+});

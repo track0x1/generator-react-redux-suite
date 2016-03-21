@@ -1,0 +1,39 @@
+import reducer from '../<%= containerName %>Reducers.es6';
+import { ActionTypes } from '../constants/<%= containerName %>Constants.es6';
+
+describe('<%= containerName %> reducers', () => {
+
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+<% if(actions[i].isAsync) { -%>
+    it('should handle REQUEST_<%- actions[i].actionName -%>', () => {
+        const prevState = {};
+        const nextState = {};
+        const action = { type: ActionTypes.RECEIVE_<%- actions[i].actionName -%> };
+        expect(reducer(prevState, action)).to.deep.equal(nextState);
+    });
+
+    it('should handle RECEIVE_<%- actions[i].actionName -%>', () => {
+        const prevState = {};
+        const nextState = {};
+        const action = { type: ActionTypes.REQUEST_<%- actions[i].actionName -%> };
+        expect(reducer(prevState, action)).to.deep.equal(nextState);
+    });
+
+    it('should handle FAILURE_<%- actions[i].actionName -%>', () => {
+        const prevState = {};
+        const nextState = {};
+        const action = { type: ActionTypes.FAILURE_<%- actions[i].actionName -%> };
+        expect(reducer(prevState, action)).to.deep.equal(nextState);
+    });
+
+<% } else { -%>
+    it('should handle <%- actions[i].actionName -%>', () => {
+        const prevState = {};
+        const nextState = {};
+        const action = { type: ActionTypes.<%- actions[i].actionName -%> };
+        expect(reducer(prevState, action)).to.deep.equal(nextState);
+    });
+
+<% } -%>
+<% } -%>
+});

@@ -1,0 +1,31 @@
+import { ActionTypes } from '../constants/<%= containerName %>Constants.es6';
+
+export default (state = {}, action) => {
+
+    switch (action.type) {
+
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+<% if(actions[i].isAsync) { -%>
+        case ActionTypes.REQUEST_<%- actions[i].actionName -%>:
+            // how do you want this action to modify the state?
+            break;
+
+        case ActionTypes.RECEIVE_<%- actions[i].actionName -%>:
+            // how do you want this action to modify the state?
+            break;
+
+        case ActionTypes.FAILURE_<%- actions[i].actionName -%>:
+            // how do you want this action to modify the state?
+            break;
+
+<% } else { -%>
+        case ActionTypes.<%- actions[i].actionName -%>:
+            // how do you want this action to modify the state?
+            break;
+
+<% } -%>
+<% } -%>
+    }
+
+    return state;
+};

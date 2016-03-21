@@ -1,0 +1,27 @@
+import { connect } from 'react-redux';
+import * as <%= containerName %>ActionCreators from '../../actions/<%= containerName %>ActionCreators.es6';
+import <%= containerName %> from '../../components/<%= containerName %>/<%= containerName %>';
+import { pick } from 'lodash';
+
+export function mapStateToProps(state) {
+    return pick(state, '<%= containerName %>');
+}
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        actions: {
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+            handle<%= actions[i].actionFuncProper -%>: (params) => {
+                dispatch(<%= containerName %>ActionCreators.<%- actions[i].actionFunc -%>(params));
+<% if ((i+1) !== z) { -%>
+            },
+
+<% } else { -%>
+            }
+<% } -%>
+<% } -%>
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(<%= containerName %>);

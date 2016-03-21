@@ -1,0 +1,44 @@
+import { ActionTypes } from '../constants/<%= containerName %>Constants.es6';
+
+<% if(actions.length > 0) { -%>
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+<% if(actions[i].isAsync) { -%>
+export function <%- actions[i].actionFunc -%>(<%- actions[i].actionParams -%>) {
+    return (dispatch) => {
+        dispatch(request<%- actions[i].actionFuncProper -%>());
+        return axios.get(url).then((response) => {
+            dispatch(receive<%- actions[i].actionFuncProper -%>(response.data));
+        }).catch((error) => {
+            dispatch(failure<%- actions[i].actionFuncProper -%>(error));
+        });
+    };
+}
+
+export function request<%- actions[i].actionFuncProper -%>() {
+    return { type: ActionTypes.REQUEST_<%- actions[i].actionName -%> };
+}
+
+export function receive<%- actions[i].actionFuncProper -%>(payload) {
+    return { type: ActionTypes.RECEIVE_<%- actions[i].actionName -%>, payload };
+}
+
+export function failure<%- actions[i].actionFuncProper -%>(error) {
+    return { type: ActionTypes.FAILURE_<%- actions[i].actionName -%>, error };
+}
+<% if ((i+1) !== z) { -%>
+
+<% } -%>
+<% } else { -%>
+export function <%- actions[i].actionFunc -%>(<%- actions[i].actionParams -%>) {
+<% if (actions[i].actionParams === '') { -%>
+    return { type: ActionTypes.<%- actions[i].actionName -%> };
+<% } else { -%>
+    return { type: ActionTypes.<%- actions[i].actionName -%>, <%- actions[i].actionParams -%> };
+<% } -%>
+}
+<% if ((i+1) !== z) { -%>
+
+<% } -%>
+<% } -%>
+<% } -%>
+<% } -%>

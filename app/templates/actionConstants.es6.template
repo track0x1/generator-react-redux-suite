@@ -1,0 +1,23 @@
+import keymirror from 'keymirror';
+
+export const ActionTypes = keymirror({
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+<% if ((i+1) != z) { -%>
+    <%- actions[i].actionName -%>: null,
+<% if(actions[i].isAsync) { -%>
+    REQUEST_<%- actions[i].actionName -%>: null,
+    RECEIVE_<%- actions[i].actionName -%>: null,
+    FAILURE_<%- actions[i].actionName -%>: null,
+<% } -%>
+<% } else { -%>
+<% if(actions[i].isAsync) { -%>
+    <%- actions[i].actionName -%>: null,
+    REQUEST_<%- actions[i].actionName -%>: null,
+    RECEIVE_<%- actions[i].actionName -%>: null,
+    FAILURE_<%- actions[i].actionName -%>: null
+<% } else { -%>
+    <%- actions[i].actionName -%>: null
+<% } -%>
+<% } -%>
+<% } -%>
+});
