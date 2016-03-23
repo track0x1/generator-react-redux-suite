@@ -11,8 +11,8 @@ export function mapDispatchToProps(dispatch) {
     return {
         actions: {
 <% for(var i = 0, z = actions.length; i < z; i++) { -%>
-            handle<%= actions[i].actionFuncProper -%>: (params) => {
-                dispatch(<%= containerName %>ActionCreators.<%- actions[i].actionFunc -%>(params));
+            handle<%= actions[i].actionFuncProper -%>: (<%- actions[i].actionParams -%>) => {
+                dispatch(<%= containerName %>ActionCreators.<%- actions[i].actionFunc -%>(<%- actions[i].actionParams -%>));
 <% if ((i+1) !== z) { -%>
             },
 

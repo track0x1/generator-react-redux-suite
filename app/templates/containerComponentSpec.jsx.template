@@ -14,7 +14,7 @@ describe('<%= containerName %> container', () => {
     });
 
     it('should be connected to redux', () => {
-        expect(ProductDetails.WrappedComponent).to.be.ok;
+        expect(<%= containerName %>.WrappedComponent).to.be.ok;
     });
 
     context('#mapStateToProps', () => {
@@ -22,10 +22,10 @@ describe('<%= containerName %> container', () => {
         it('should return the proper state for <%= containerName %>', () => {
             const mockOriginalState = {
                 FakeData: {},
-                <%= containerName %>: {}
+                <%= containerName %>: { somekey: 'someval' }
             };
             const mockReturnedState = {
-                <%= containerName %>: {}
+                <%= containerName %>: { somekey: 'someval' }
             };
             expect(mapStateToProps(mockOriginalState)).to.deep.equal(mockReturnedState);
         });
@@ -40,24 +40,27 @@ describe('<%= containerName %> container', () => {
             mappedDispatch = mapDispatchToProps(dispatchStub);
         });
 
-        context('`handle[YourActionName]`', () => {
-            it('should have an action `handle[YourActionName]`', () => {
-                expect(mappedDispatch.actions.handle[YourActionName]).to.be.a.function;
+<% for(var i = 0, z = actions.length; i < z; i++) { -%>
+        context('`handle<%= actions[i].actionFuncProper -%>`', () => {
+            it('should have an action `handle<%= actions[i].actionFuncProper -%>`', () => {
+                expect(mappedDispatch.actions.handle<%= actions[i].actionFuncProper -%>).to.be.a.function;
             });
 
             it('should call its respective action creator', () => {
-                sandbox.stub(<%= containerName %>ActionCreators, '[yourActionName]');
+                sandbox.stub(<%= containerName %>ActionCreators, '<%- actions[i].actionFunc -%>');
                 const data = { somekey: 'some val' };
-                mapDispatchToProps(dispatchStub).actions.handle[YourActionName](
-                    // replace with params expected by function
+                mapDispatchToProps(dispatchStub).actions.handle<%= actions[i].actionFuncProper -%>(
+                    // replace with params expected by function, if any. use values from `data` const.
                 );
-                expect(<%= containerName %>ActionCreators.[yourActionName]).to.have.been.calledOnce;
-                expect(<%= containerName %>ActionCreators.[yourActionName]).to.have.been.calledWithExactly(
-                    // replace with params expected by function
+                expect(<%= containerName %>ActionCreators.<%- actions[i].actionFunc -%>).to.have.been.calledOnce;
+                expect(<%= containerName %>ActionCreators.<%- actions[i].actionFunc -%>).to.have.been.calledWithExactly(
+                    // replace with params expected by function (if any... or omit this expect() statement)
+                    // use values from `data` const.
                 );
             });
         });
 
+<% } -%>
     });
 
 });
