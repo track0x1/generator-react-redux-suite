@@ -52,7 +52,7 @@ module.exports = yeoman.generators.Base.extend({
 
         var actionPrompt = [{
             name: 'actionFunc', // actionName is _.toUpper(_.snakeCase(ccf))
-            message: 'What is your action\'s name? (camel case)',
+            message: 'What is your action\'s name? (camelCase)',
             'default': 'actionName'
         }, {
             name: 'isAsync',
